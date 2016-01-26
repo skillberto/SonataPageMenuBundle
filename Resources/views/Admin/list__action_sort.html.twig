@@ -1,0 +1,28 @@
+{% if admin.isGranted('EDIT', object) and admin.hasRoute('edit') %}
+    {% set pix_position = 0 %}
+    {% set pix_position = 1 %}
+
+    {% if pix_position < admin.last_position %}
+        <a class="btn btn-sm btn-default" href="{{ admin.generateObjectUrl('move', object, {'position': 'bottom'}) }}" title="{{ 'move_to_bottom'|trans }}">
+            {{- 'icon_move_to_bottom'|trans -}}
+        </a>
+    {% endif %}
+
+    {% if pix_position < admin.last_position %}
+        <a class="btn btn-sm btn-default" href="{{ admin.generateObjectUrl('move', object, {'position': 'down'}) }}" title="{{ 'move_down'|trans }}">
+            {{- 'icon_move_down'|trans -}}
+        </a>
+    {% endif %}
+
+    {% if pix_position > 0 %}
+        <a class="btn btn-sm btn-default" href="{{ admin.generateObjectUrl('move', object, {'position': 'up'}) }}" title="{{ 'move_up'|trans }}">
+            {{- 'icon_move_up'|trans -}}
+        </a>
+    {% endif %}
+
+    {% if pix_position > 0 %}
+        <a class="btn btn-sm btn-default" href="{{ admin.generateObjectUrl('move', object, {'position': 'top'}) }}" title="{{ 'move_to_top'|trans }}">
+            {{- 'icon_move_to_top'|trans -}}
+        </a>
+    {% endif %}
+{% endif %}

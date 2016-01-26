@@ -3,7 +3,7 @@
 namespace Skillberto\SonataPageMenuBundle\Admin;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Skillberto\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\Admin;
 use Skillberto\SonataPageMenuBundle\Entity\Menu;
 use Skillberto\SonataPageMenuBundle\Site\OptionalSiteInterface;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -98,7 +98,8 @@ class MenuAdmin extends Admin
 
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->add('position_choices', $this->getRouterIdParameter().'/listPositions');
+        $collection->add('move', $this->getRouterIdParameter().'/move/{position}');
+        $collection->add('activate', $this->getRouterIdParameter().'/activate');
     }
 
     /**
@@ -130,15 +131,8 @@ class MenuAdmin extends Admin
             $this->initializeCreateForm();
         }
 
-        $maxPosition = $this->getMaxPosition()+1;
-
-        $choices = range(1, $maxPosition);
-        array_unshift($choices, "p");
-        unset($choices[0]);
-
         $formMapper
              ->add('name', 'text')
-             ->add('position', 'choice', array('choices' => $choices, 'data' => $maxPosition))
              ->add('page', 'sonata_page_selector', array(
                         'site'          => $this->siteInstance,
                         'model_manager' => $this->getModelManager(),
@@ -171,7 +165,13 @@ class MenuAdmin extends Admin
             ->add('position')
             ->add('active')
             ->add('clickable')
-            ->add('_action', 'actions', array('actions' => $this->getTemplateActions()))
+            ->add('_action', 'actions', array(
+                'actions' => array(
+                    'activate'  => array('template' => 'SkillbertoAdminBundle:Admin:list__action_activate.html.twig'),
+                    'move'      => array('template' => 'SkillbertoSonataPageBundle:Admin:list__action_sort.html.twig')
+                    )
+                )
+            )
         ;
     }
 
@@ -204,13 +204,6 @@ class MenuAdmin extends Admin
         $this->formAttribute = array('checked' => 'checked');
         $this->pageInstance  = null;
         $this->siteInstance  = $this->getCurrentSite();
-    }
-
-    protected function getMaxPosition()
-    {
-        $repo = $this->getConfigurationPool()->getContainer()->get('doctrine')->getRepository($this->getClass());
-
-        return $repo->getMaxPositionByParentId();
     }
 
     /**
