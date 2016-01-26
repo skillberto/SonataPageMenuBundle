@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Menu
  */
-class Menu extends \Skillberto\AdminBundle\Entity\Base
+class Menu
 {
     /**
      * @var integer
@@ -68,6 +68,26 @@ class Menu extends \Skillberto\AdminBundle\Entity\Base
      * @var array
      */
     protected $attribute;
+
+    /**
+     * @var integer
+     */
+    protected $position;
+
+    /**
+     * @var boolean
+     */
+    protected $active;
+
+    /**
+     * @var \DateTime
+     */
+    protected $createdAt;
+
+    /**
+     * @var \DateTime
+     */
+    protected $updatedAt;
 
     /**
      * Constructor
@@ -355,10 +375,113 @@ class Menu extends \Skillberto\AdminBundle\Entity\Base
         return $this->attribute;
     }
 
+
+    /**
+     * Set position
+     *
+     * @param integer $position
+     * @return Menu
+     */
     public function setPosition($position)
     {
         $this->position = $position;
 
         return $this;
+    }
+
+    /**
+     * Get position
+     *
+     * @return integer 
+     */
+    public function getPosition()
+    {
+        return $this->position;
+    }
+
+    /**
+     * Set active
+     *
+     * @param boolean $active
+     * @return Menu        // Add your code here
+
+     */
+    public function setActive($active)
+    {
+        $this->active = $active;
+
+        return $this;
+    }
+
+    /**
+     * Get active
+     *
+     * @return boolean 
+     */
+    public function getActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * Set createdAt
+     *
+     * @param \DateTime $createdAt
+     * @return Menu
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * Get createdAt
+     *
+     * @return \DateTime 
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * Set updatedAt
+     *
+     * @param \DateTime $updatedAt
+     * @return Menu
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt
+     *
+     * @return \DateTime 
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+    /**
+     * @ORM\PrePersist
+     */
+    public function createdAt()
+    {
+        $this->setCreatedAt( new \DateTime("now") );
+        $this->setUpdatedAt( new \DateTime("now") );
+    }
+
+    /**
+     * @ORM\PostPersist
+     */
+    public function updateAt()
+    {
+        $this->setUpdatedAt( new \DateTime("now") );
     }
 }

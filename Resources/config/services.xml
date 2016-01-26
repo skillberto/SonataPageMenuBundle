@@ -35,17 +35,5 @@
             <argument type="service" id="skillberto.sonatamenu.site.optional" />
         </service>
 
-        <service id="skillberto.sonatamenu.block.breadcrumb" class="Skillberto\SonataPageMenuBundle\Block\Breadcrumb\BreadcrumbBlockService" >
-            <tag name="sonata.block" />
-            <tag name="sonata.breadcrumb" />
-
-            <argument>skillberto_menu_breadcrumb</argument>
-            <argument>skillberto.sonatamenu.block.breadcrumb</argument>
-            <argument>Skillberto\SonataPageMenuBundle\Entity\Menu</argument>
-            <argument type="service" id="templating" />
-            <argument type="service" id="knp_menu.menu_provider" />
-            <argument type="service" id="knp_menu.factory" />
-            <argument type="service" id="request_stack" />
-        </service>
     </services>
 </container>

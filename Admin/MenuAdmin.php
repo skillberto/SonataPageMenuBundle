@@ -4,6 +4,7 @@ namespace Skillberto\SonataPageMenuBundle\Admin;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Skillberto\AdminBundle\Admin\Admin;
+use Skillberto\SonataPageMenuBundle\Entity\Menu;
 use Skillberto\SonataPageMenuBundle\Site\OptionalSiteInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -48,7 +49,7 @@ class MenuAdmin extends Admin
     }
 
     /**
-     * @return MenuAdmin
+     * @return Menu
      */
     public function getNewInstance()
     {
@@ -58,6 +59,25 @@ class MenuAdmin extends Admin
         $instance->setSite($site);
 
         return $instance;
+    }
+
+    /**
+     * @param   string $context
+     *
+     * @return \Sonata\AdminBundle\Datagrid\ProxyQueryInterface
+     */
+    public function createQuery($context = 'list')
+    {
+        $query = parent::createQuery($context);
+        $query->andWhere(
+            $query->expr()->eq($query->getRootAlias() . '.site', ':my_param')
+        );
+
+        $query->setParameter('my_param', $this->getCurrentSite());
+        $query->orderBy('o.root', 'ASC');
+        $query->addOrderBy('o.lft', 'ASC');
+
+        return $query;
     }
 
     /**
@@ -107,7 +127,7 @@ class MenuAdmin extends Admin
 
         $formMapper
              ->add('name', 'text')
-             ->add('position', 'hidden')
+             ->add('position', 'choice', array('choices' => $this->getPositionChoices()))
              ->add('page', 'sonata_page_selector', array(
                         'site'          => $this->siteInstance,
                         'model_manager' => $this->getModelManager(),
@@ -123,6 +143,38 @@ class MenuAdmin extends Admin
              ->add('active', 'checkbox', array('required' => false, 'attr' => $this->formAttribute))
              ->add('clickable', 'checkbox', array('required' => false, 'attr' => $this->formAttribute))
             ;
+    }
+
+    /**
+     * @param \Sonata\AdminBundle\Datagrid\ListMapper $listMapper
+     *
+     * @return void
+     */
+    protected function configureListFields(ListMapper $listMapper)
+    {
+        $listMapper
+            ->addIdentifier('id')
+            ->add('name')
+            ->add('page')
+            ->add('parent')
+            ->add('active')
+            ->add('clickable')
+            ->add('_action', 'actions', array('actions' => $this->getTemplateActions()))
+        ;
+    }
+
+    /**
+     * @param \Sonata\AdminBundle\Datagrid\DatagridMapper $datagridMapper
+     *
+     * @return void
+     */
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    {
+        $datagridMapper
+            ->add('name')
+            ->add('page')
+            ->add('parent')
+        ;
     }
 
     protected function initializeEditForm()
@@ -141,56 +193,14 @@ class MenuAdmin extends Admin
         $this->pageInstance  = null;
         $this->siteInstance  = $this->getCurrentSite();
     }
-    
-    /**
-     * @param \Sonata\AdminBundle\Datagrid\ListMapper $listMapper
-     *
-     * @return void
-     */
-    protected function configureListFields(ListMapper $listMapper)
-    {       
-        $listMapper
-            ->addIdentifier('id')
-            ->add('name')
-            ->add('page')
-            ->add('parent')
-            ->add('active')
-            ->add('clickable')
-            ->add('_action', 'actions', array('actions' => $this->getTemplateActions()))
-        ;
-    }
 
-    /**
-     * @param   string $context
-     *
-     * @return \Sonata\AdminBundle\Datagrid\ProxyQueryInterface
-     */
-    public function createQuery($context = 'list')
+    protected function getPositionChoices()
     {
-        $query = parent::createQuery($context);
-        $query->andWhere(
-            $query->expr()->eq($query->getRootAlias() . '.site', ':my_param')
-        );
+        $repo = $this->getConfigurationPool()->getContainer()->get('doctrine')->getRepository($this->getClass());
 
-        $query->setParameter('my_param', $this->getCurrentSite());
-        $query->orderBy('o.root', 'ASC');
-        $query->addOrderBy('o.lft', 'ASC');
+        $max = $repo->getMaxPositionByParent();
 
-        return $query;
-    }
-
-    /**
-     * @param \Sonata\AdminBundle\Datagrid\DatagridMapper $datagridMapper
-     *
-     * @return void
-     */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
-    {
-        $datagridMapper
-            ->add('name')
-            ->add('page')
-            ->add('parent')
-        ;
+        return range(1, $max + 1);
     }
 
     /**
