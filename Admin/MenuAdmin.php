@@ -167,8 +167,10 @@ class MenuAdmin extends Admin
             ->add('clickable')
             ->add('_action', 'actions', array(
                 'actions' => array(
+                    'edit'      => array(),
+                    'delete'    => array(),
                     'activate'  => array('template' => 'SkillbertoAdminBundle:Admin:list__action_activate.html.twig'),
-                    'move'      => array('template' => 'SkillbertoSonataPageBundle:Admin:list__action_sort.html.twig')
+                    'move'      => array('template' => 'SkillbertoSonataPageMenuBundle:Admin:list__action_sort.html.twig')
                     )
                 )
             )
@@ -228,5 +230,10 @@ class MenuAdmin extends Admin
     protected function getCurrentSite()
     {
         return $this->optionalSiteInterface->getChosenSite();
+    }
+
+    public function last_position()
+    {
+        return 1;
     }
 }
