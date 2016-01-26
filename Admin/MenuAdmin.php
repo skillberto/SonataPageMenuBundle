@@ -3,6 +3,7 @@
 namespace Skillberto\SonataPageMenuBundle\Admin;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Common\Util\ClassUtils;
 use Sonata\AdminBundle\Admin\Admin;
 use Skillberto\SonataPageMenuBundle\Entity\Menu;
 use Skillberto\SonataPageMenuBundle\Site\OptionalSiteInterface;
@@ -23,7 +24,8 @@ class MenuAdmin extends Admin
         $optionalSiteInterface,
         $formAttribute = array(),
         $pageInstance,
-        $siteInstance
+        $siteInstance,
+        $last_positions = array()
     ;
 
     /**
@@ -73,9 +75,9 @@ class MenuAdmin extends Admin
             $query->expr()->eq($query->getRootAlias() . '.site', ':my_param')
         );
 
+        $query->addOrderBy($query->getRootAlias() .'.root', 'ASC');
+        $query->addOrderBy($query->getRootAlias() .'.lft', 'ASC');
         $query->setParameter('my_param', $this->getCurrentSite());
-        $query->orderBy('o.root', 'ASC');
-        $query->addOrderBy('o.lft', 'ASC');
 
         return $query;
     }
@@ -111,7 +113,7 @@ class MenuAdmin extends Admin
     {
         $showMapper
             ->add('name')
-            ->add('position')
+            #->add('position')
             ->add('page')
             ->add('parent')
             ->add('active')
@@ -162,7 +164,7 @@ class MenuAdmin extends Admin
             ->add('name')
             ->add('page')
             ->add('parent')
-            ->add('position')
+            #->add('position')
             ->add('active')
             ->add('clickable')
             ->add('_action', 'actions', array(
@@ -225,15 +227,22 @@ class MenuAdmin extends Admin
     }
 
     /**
+     * @param  int $parentId
+     * @return int
+     */
+    protected function getLastPosition($parentId)
+    {
+    }
+
+    protected function getLastPositions()
+    {
+    }
+
+    /**
      * @return \Sonata\PageBundle\Model\Site
      */
     protected function getCurrentSite()
     {
         return $this->optionalSiteInterface->getChosenSite();
-    }
-
-    public function last_position()
-    {
-        return 1;
     }
 }

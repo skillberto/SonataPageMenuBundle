@@ -16,6 +16,6 @@ class SkillbertoSonataPageMenuBundle extends Bundle
         $em = $this->container->get('doctrine.orm.default_entity_manager');
         $evm = $em->geteventmanager();
         $evm->addeventsubscriber($treeListener);
-        $evm->addeventsubscriber($sortableListener);
+        //$evm->addeventsubscriber($sortableListener);
     }
 }
