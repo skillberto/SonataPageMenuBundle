@@ -30,25 +30,26 @@ class MenuRepository extends NestedTreeRepository
 
     }
 
-    public function getMaxPositionByParent($parent = null)
+    public function getMaxPositionByParentId($parent = null)
     {
         if ($parent == null) {
             if ($parentEntities = $this->findAllNotNull('parent')) {
                 foreach ($parentEntities as $key => $entity) {
-                    if ($key != 0 && $parent != $entity->getParent()->getName()) {
+                    if ($key != 0 && $parent != $entity->getParent()->getId()) {
                         throw new InvalidArgumentException(sprintf("Can't identify which parent required, more then one found. Please add it into the argument."));
                     }
 
-                    $parent = $entity->getParent()->getName();
+                    $parent = $entity->getParent()->getId();
                 }
             }
         }
 
-        $qb = $this->createQueryBuilder('entity');
-        $qb->select('MAX(entity.position) as max_position');
+        $qb = $this->createQueryBuilder('e');
+        $qb->select('MAX(e.position) as max_position');
 
         if ($parent != null) {
-            $qb->andWhere('entity.parent', $parent);
+            $qb->where('e.parent = :parent');
+            $qb->setParameter('parent', $parent);
         }
 
         $max = 0;

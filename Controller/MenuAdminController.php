@@ -3,6 +3,8 @@
 namespace Skillberto\SonataPageMenuBundle\Controller;
 
 use Skillberto\AdminBundle\Controller\CRUDController as Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class MenuAdminController extends Controller
 {
@@ -25,6 +27,23 @@ class MenuAdminController extends Controller
             'form'        => $formView,
             'csrf_token'  => $this->getCsrfToken('sonata.batch'),
         ));
+    }
+
+    public function listPositionsAction(Request $request)
+    {
+        if (false === $this->admin->isGranted('LIST')) {
+            throw new AccessDeniedException();
+        }
+
+        if (!$request->isXmlHttpRequest()) {
+            throw new RouteNotFoundException();
+        }
+
+        $repo = $this->get('doctrine')->getRepository($this->admin->getClass());
+
+        $max = $repo->getMaxPositionByParentId($request->request->get('parent'));
+
+        return range(1, $max + 1);
     }
 
     /**

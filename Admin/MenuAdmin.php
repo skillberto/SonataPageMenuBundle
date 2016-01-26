@@ -96,6 +96,11 @@ class MenuAdmin extends Admin
             ->end();
     }
 
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('position_choices', $this->getRouterIdParameter().'/listPositions');
+    }
+
     /**
      * @param \Sonata\AdminBundle\Show\ShowMapper $showMapper
      *
@@ -125,9 +130,15 @@ class MenuAdmin extends Admin
             $this->initializeCreateForm();
         }
 
+        $maxPosition = $this->getMaxPosition()+1;
+
+        $choices = range(1, $maxPosition);
+        array_unshift($choices, "p");
+        unset($choices[0]);
+
         $formMapper
              ->add('name', 'text')
-             ->add('position', 'choice', array('choices' => $this->getPositionChoices()))
+             ->add('position', 'choice', array('choices' => $choices, 'data' => $maxPosition))
              ->add('page', 'sonata_page_selector', array(
                         'site'          => $this->siteInstance,
                         'model_manager' => $this->getModelManager(),
@@ -157,6 +168,7 @@ class MenuAdmin extends Admin
             ->add('name')
             ->add('page')
             ->add('parent')
+            ->add('position')
             ->add('active')
             ->add('clickable')
             ->add('_action', 'actions', array('actions' => $this->getTemplateActions()))
@@ -194,13 +206,11 @@ class MenuAdmin extends Admin
         $this->siteInstance  = $this->getCurrentSite();
     }
 
-    protected function getPositionChoices()
+    protected function getMaxPosition()
     {
         $repo = $this->getConfigurationPool()->getContainer()->get('doctrine')->getRepository($this->getClass());
 
-        $max = $repo->getMaxPositionByParent();
-
-        return range(1, $max + 1);
+        return $repo->getMaxPositionByParentId();
     }
 
     /**
