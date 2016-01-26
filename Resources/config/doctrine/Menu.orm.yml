@@ -1,0 +1,63 @@
+Skillberto\SonataPageMenuBundle\Entity\Menu:
+  type: entity
+  table: skillberto_menu
+  repositoryClass: Gedmo\Tree\Entity\Repository\NestedTreeRepository
+  gedmo:
+    tree:
+      type: nested
+  id:
+    id:
+      type: integer
+      column: id
+      generator:
+        strategy: AUTO
+  fields:
+    name:
+      type: string
+    clickable:
+      type: boolean
+    lft:
+      type: integer
+      gedmo:
+        - treeLeft
+    rgt:
+      type: integer
+      gedmo:
+        - treeRight
+    root:
+      type: integer
+      nullable: true
+      gedmo:
+        - treeRoot
+    lvl:
+      type: integer
+      gedmo:
+        - treeLevel
+    attribute:
+      type: array
+  manyToOne:
+    page:
+      targetEntity: Application\Sonata\PageBundle\Entity\Page
+      joinColumn:
+        name: page_id
+        referencedColumnName: id
+    site:
+      targetEntity: Application\Sonata\PageBundle\Entity\Site
+      joinColumn:
+        name: site_id
+        referencedColumnName: id
+    parent:
+      targetEntity: Skillberto\SonataPageMenuBundle\Entity\Menu
+      inversedBy: children
+      joinColumn:
+        name: parent_id
+        referencedColumnName: id
+        onDelete: CASCADE
+      gedmo:
+       - treeParent
+  oneToMany:
+    children:
+      targetEntity: Skillberto\SonataPageMenuBundle\Entity\Menu
+      mappedBy: parent
+      orderBy:
+        lft: ASC
