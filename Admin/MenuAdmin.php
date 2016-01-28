@@ -4,6 +4,7 @@ namespace Skillberto\SonataPageMenuBundle\Admin;
 
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Util\ClassUtils;
+use Skillberto\SonataPageMenuBundle\Util\PositionHandler;
 use Sonata\AdminBundle\Admin\Admin;
 use Skillberto\SonataPageMenuBundle\Entity\Menu;
 use Skillberto\SonataPageMenuBundle\Site\OptionalSiteInterface;
@@ -25,16 +26,14 @@ class MenuAdmin extends Admin
         $formAttribute = array(),
         $pageInstance,
         $siteInstance,
-        $last_positions = array()
+        $positionHandler
     ;
 
-    /**
-     * Set ContainerAware instance into this class, and construct the parent
-     */
     public function __construct($code, $class, $baseControllerName, PageManagerInterface $pageManagerInterface, OptionalSiteInterface $optionalSiteInterface)
     {
         $this->pageManagerInterface  = $pageManagerInterface;
         $this->optionalSiteInterface = $optionalSiteInterface;
+        $this->positionHandler       = new PositionHandler();
 
         parent::__construct($code, $class, $baseControllerName);
     }
@@ -71,6 +70,7 @@ class MenuAdmin extends Admin
     public function createQuery($context = 'list')
     {
         $query = parent::createQuery($context);
+
         $query->andWhere(
             $query->expr()->eq($query->getRootAlias() . '.site', ':my_param')
         );
@@ -98,6 +98,41 @@ class MenuAdmin extends Admin
             ->end();
     }
 
+    /**
+     * @param  $positionHandler
+     * @return $this
+     */
+    public function setPositionHandler($positionHandler)
+    {
+        $this->positionHandler = $positionHandler;
+
+        return $this;
+    }
+
+    /**
+     * @return PositionHandler
+     */
+    public function getPositionHandler()
+    {
+        return $this->positionHandler;
+    }
+
+    /**
+     * @return \Sonata\PageBundle\Model\Site
+     */
+    public function getCurrentSite()
+    {
+        return $this->optionalSiteInterface->getChosenSite();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSites()
+    {
+        return $this->optionalSiteInterface->getSiteManager()->findBy(array());
+    }
+
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('move', $this->getRouterIdParameter().'/move/{position}');
@@ -113,7 +148,6 @@ class MenuAdmin extends Admin
     {
         $showMapper
             ->add('name')
-            #->add('position')
             ->add('page')
             ->add('parent')
             ->add('active')
@@ -159,12 +193,13 @@ class MenuAdmin extends Admin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
+        $this->positionHandler->setLastPositions($this->getLastPositionsFromDb());
+
         $listMapper
             ->addIdentifier('id')
-            ->add('name')
+            ->add('name', 'string', array('template' => 'SkillbertoSonataPageMenuBundle:Admin:base_list_field.html.twig'))
             ->add('page')
             ->add('parent')
-            #->add('position')
             ->add('active')
             ->add('clickable')
             ->add('_action', 'actions', array(
@@ -227,22 +262,23 @@ class MenuAdmin extends Admin
     }
 
     /**
-     * @param  int $parentId
-     * @return int
+     * @return array
      */
-    protected function getLastPosition($parentId)
+    protected function getLastPositionsFromDb()
     {
-    }
+        $repo = $this->getConfigurationPool()->getContainer()->get('doctrine')->getRepository($this->getClass());
 
-    protected function getLastPositions()
-    {
-    }
+        $count = array();
 
-    /**
-     * @return \Sonata\PageBundle\Model\Site
-     */
-    protected function getCurrentSite()
-    {
-        return $this->optionalSiteInterface->getChosenSite();
+        foreach ($repo->getParentChildNumber() as $data) {
+
+            if ($data['parent'] == null ) {
+                $data['parent'] = 0;
+            }
+
+            $count[$data['parent']] = $data['size'];
+        }
+
+        return $count;
     }
 }

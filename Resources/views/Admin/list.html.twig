@@ -1,6 +1,10 @@
 {% extends 'SonataAdminBundle:CRUD:base_list.html.twig' %}
 
 {% block list_table %}
+    {% if admin.getCurrentSite() is defined %}
+        {% set currentSite = admin.getCurrentSite() %}
+        {% set sites = admin.getSites() %}
+
     <div class="box-header">
         <h1 class="box-title">
             {{ 'pages.tree_site_label'|trans({}, 'SonataPageBundle') }}
@@ -25,6 +29,7 @@
             </div>
         </h1>
     </div>
+    {% endif %}
     <div class="box-content">
         {{ parent() }}
     </div>

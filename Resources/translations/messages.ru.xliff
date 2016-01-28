@@ -42,6 +42,10 @@
                 <source>icon_move_to_top</source>
                 <target>⇈</target>
             </trans-unit>
+            <trans-unit id="11">
+                <source>label_menu</source>
+                <target>Menu</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

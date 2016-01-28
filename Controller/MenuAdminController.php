@@ -3,45 +3,43 @@
 namespace Skillberto\SonataPageMenuBundle\Controller;
 
 use Skillberto\AdminBundle\Controller\CRUDController as Controller;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class MenuAdminController extends Controller
 {
-    public function listAction()
+    public function moveAction(Request $request)
     {
         if (false === $this->admin->isGranted('LIST')) {
             throw new AccessDeniedException();
         }
 
-        $datagrid = $this->admin->getDatagrid();
-        $formView = $datagrid->getForm()->createView();
+        $repo = $this->getDoctrine()->getRepository($this->admin->getClass());
 
-        $this->get('twig')->getExtension('form')->renderer->setTheme($formView, $this->admin->getFilterTheme());
+        $menu = $this->getObject();
 
-        return $this->render('SkillbertoSonataPageMenuBundle:Admin:list.html.twig', array(
-            'action' => 'list',
-            'sites'  => $this->getSites(),
-            'currentSite' => $this->getCurrentSite(),
-            'datagrid'    => $datagrid,
-            'form'        => $formView,
-            'csrf_token'  => $this->getCsrfToken('sonata.batch'),
-        ));
-    }
+        switch ($request->get('position')) {
+            case 'down':
+                $repo->moveDown($menu, 1);
+                break;
 
-    /**
-     * @return \Sonata\PageBundle\Model\Site
-     */
-    protected function getCurrentSite()
-    {
-        $optionalSite = $this->container->get('skillberto.sonatamenu.site.optional');
+            case 'bottom':
+                $repo->moveDown($menu, true);
+                break;
 
-        return $optionalSite->getChosenSite();
-    }
+            case 'up':
+                $repo->moveUp($menu, 1);
+                break;
 
-    /**
-     * @return array
-     */
-    protected function getSites()
-    {
-        return $this->container->get('sonata.page.manager.site')->findBy(array());
+            case 'top':
+                $repo->moveUp($menu, true);
+                break;
+
+            default:
+                throw new RouteNotFoundException();
+        }
+
+        return new RedirectResponse($this->admin->generateUrl('list'));
     }
 }

@@ -28,4 +28,17 @@ class MenuRepository extends NestedTreeRepository
 
         return $res[0]['max_position'];
     }
+
+    public function getParentChildNumber()
+    {
+        $qb = $this->createQueryBuilder('m')
+            ->select('IDENTITY(m.parent) as parent')
+            ->addSelect('COUNT(m) as size')
+            ->groupBy('m.parent')
+            ->addOrderBy('m.root', 'ASC')
+            ->addOrderBy('m.lft', 'ASC')
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
 }

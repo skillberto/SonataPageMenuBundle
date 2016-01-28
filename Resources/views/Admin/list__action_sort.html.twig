@@ -1,28 +1,41 @@
 {% if admin.isGranted('EDIT', object) and admin.hasRoute('edit') %}
-    {% set position = 0 %}
-    {% set last_position = 0 %}
+    {% set parent = 0 %}
 
-    {% if position < last_position %}
-        <a class="btn btn-sm btn-default" href="{{ admin.generateObjectUrl('move', object, {'position': 'bottom'}) }}" title="{{ 'move_to_bottom'|trans }}">
-            {{- 'icon_move_to_bottom'|trans -}}
-        </a>
+    {% if object.getParent() is defined and object.getParent() is not null %}
+        {% set parent = object.getParent().getId() %}
     {% endif %}
 
-    {% if position < last_position %}
-        <a class="btn btn-sm btn-default" href="{{ admin.generateObjectUrl('move', object, {'position': 'down'}) }}" title="{{ 'move_down'|trans }}">
-            {{- 'icon_move_down'|trans -}}
-        </a>
+    {% if loop.index > 1 %}
+        {% set position = admin.getPositionHandler().incrementPosition(parent).getPosition(parent) %}
+    {% else %}
+        {% set position = admin.getPositionHandler().getPosition(parent) %}
     {% endif %}
 
-    {% if position > 1 %}
-        <a class="btn btn-sm btn-default" href="{{ admin.generateObjectUrl('move', object, {'position': 'up'}) }}" title="{{ 'move_up'|trans }}">
-            {{- 'icon_move_up'|trans -}}
-        </a>
-    {% endif %}
+    {% set last_position = admin.getPositionHandler().getLastPosition(parent) %}
 
-    {% if position > 1 %}
-        <a class="btn btn-sm btn-default" href="{{ admin.generateObjectUrl('move', object, {'position': 'top'}) }}" title="{{ 'move_to_top'|trans }}">
-            {{- 'icon_move_to_top'|trans -}}
-        </a>
+    {% if object.getName() != 'root' %}
+        {% if position < last_position %}
+            <a class="btn btn-sm btn-default" href="{{ admin.generateObjectUrl('move', object, {'position': 'bottom'}) }}" title="{{ 'move_to_bottom'|trans }}">
+                {{- 'icon_move_to_bottom'|trans -}}
+            </a>
+        {% endif %}
+
+        {% if position < last_position %}
+            <a class="btn btn-sm btn-default" href="{{ admin.generateObjectUrl('move', object, {'position': 'down'}) }}" title="{{ 'move_down'|trans }}">
+                {{- 'icon_move_down'|trans -}}
+            </a>
+        {% endif %}
+
+        {% if position > 1 %}
+            <a class="btn btn-sm btn-default" href="{{ admin.generateObjectUrl('move', object, {'position': 'up'}) }}" title="{{ 'move_up'|trans }}">
+                {{- 'icon_move_up'|trans -}}
+            </a>
+        {% endif %}
+
+        {% if position > 1 %}
+            <a class="btn btn-sm btn-default" href="{{ admin.generateObjectUrl('move', object, {'position': 'top'}) }}" title="{{ 'move_to_top'|trans }}">
+                {{- 'icon_move_to_top'|trans -}}
+            </a>
+        {% endif %}
     {% endif %}
 {% endif %}
