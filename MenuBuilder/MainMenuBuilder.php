@@ -4,6 +4,7 @@ namespace Skillberto\SonataPageMenuBundle\MenuBuilder;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
+use Skillberto\SonataPageMenuBundle\Entity\Menu;
 use Sonata\PageBundle\Entity\PageManager;
 use Sonata\PageBundle\Route\CmsPageRouter;
 use Sonata\PageBundle\Site\SiteSelectorInterface;
@@ -17,7 +18,6 @@ class MainMenuBuilder implements MenuBuilderInterface
         $menuEntity,
         $factoryInterface,
         $managerRegistry,
-        $requestStack,
         $routerInterface,
         $siteSelectorInterface,
         $currentMenuName = null,
@@ -30,7 +30,7 @@ class MainMenuBuilder implements MenuBuilderInterface
         $this->menuEntity               = $menuEntity;
         $this->factoryInterface         = $factoryInterface;
         $this->managerRegistry          = $managerRegistry;
-        $this->requestStack             = $requestStack;
+        $this->request                  = $requestStack->getCurrentRequest();;
         $this->routerInterface          = $routerInterface;
         $this->siteSelectorInterface    = $siteSelectorInterface;
     }
@@ -54,44 +54,43 @@ class MainMenuBuilder implements MenuBuilderInterface
     protected function renderMenu()
     {
         $site    = $this->siteSelectorInterface->retrieve();
-        $menus   = $this->managerRegistry->getRepository($this->menuEntity)->findBy(array("active" => 1, "site" => $site->getId(), "parent" => null), array("position" => "ASC"));
 
-        $this->request = $this->requestStack->getCurrentRequest();
-        $this->mainMenu = $this->factoryInterface->createItem('root');
-        $this->mainMenu->setChildrenAttributes(array("class" => "nav sf-menu clearfix sf-js-enabled"));
+        $menus   = $this->managerRegistry->getRepository($this->menuEntity)->findBy(array("site" => $site->getId(), "parent" => null), array("root" => "ASC", "lft" => "ASC"));
 
-        $this->putRootAttributes($this->mainMenu);
-        $this->createMenuStructure($menus, $this->mainMenu);
+        $this->createMenuStructure($menus);
     }
 
-    protected function createMenuStructure($menus, ItemInterface $root)
+    protected function createMenuStructure($menus, ItemInterface $root = null)
     {
-        $this->checkArgument($menus);
-
         foreach ($menus as $menu) {
             $this->createMenu($menu, $root);
         }
     }
 
-    protected function checkArgument($menus)
-    {
-        if ((! $menus instanceof \ArrayAccess ) && (! is_array($menus))) {
-            throw new \InvalidArgumentException(sprintf("CreateMenu first argument must be an array or instance of ArrayAccess, %s given", gettype($menus)));
-        }
-    }
-
-    protected function createMenu($menu, ItemInterface $root)
+    protected function createMenu(Menu $menu, ItemInterface $root = null)
     {
         $currentItem = $this->createMenuItem($menu);
 
-        $root->addChild($currentItem);
+        $level = $menu->getLvl();
 
-        if (count($menu->getChildren()) > 0) {
-            $this->createChildMenu($menu->getChildren(), $currentItem);
+        if ($level == 0) {
+            $this->mainMenu = $currentItem;
+        } else {
+            $root->addChild($currentItem);
+        }
+
+        if (count($menu->getChildren()) > 0 && ($menu->getActive() or $level == 0)) {
+            if ($level == 0) {
+                $this->putRootAttributes($currentItem);
+            } else {
+                $this->putChildAttributes($currentItem);
+            }
+
+            $this->createMenuStructure($menu->getChildren(), $currentItem);
         }
     }
 
-    protected function createMenuItem($menu)
+    protected function createMenuItem(Menu $menu)
     {
         $current = $this->factoryInterface->createItem($menu->getName(), array('label' => $menu->getName()));
 
@@ -99,7 +98,7 @@ class MainMenuBuilder implements MenuBuilderInterface
             $this->createLink($current, $menu);
         }
 
-        if ($this->request->get('page') && $menu->getPage()->getId() == $this->request->get('page')->getId()) {
+        if ($this->request->get('page') && $menu->getPage() && $menu->getPage()->getId() == $this->request->get('page')->getId()) {
             $current->setCurrent(true);
             $this->currentMenuName = $menu->getName();
         }
@@ -107,13 +106,7 @@ class MainMenuBuilder implements MenuBuilderInterface
         return $current;
     }
 
-    protected function createChildMenu(\ArrayAccess $children, ItemInterface $currentItem)
-    {
-        $this->putChildAttributes($currentItem);
-        $this->createMenuStructure($children, $currentItem);
-    }
-
-    protected function createLink(ItemInterface $itemInterface, $menu)
+    protected function createLink(ItemInterface $itemInterface, Menu $menu)
     {
         $uri = $this->routerInterface->generate($menu->getPage());
 
