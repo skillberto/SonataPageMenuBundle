@@ -67,7 +67,7 @@ class Menu
     /**
      * @var array
      */
-    protected $attribute;
+    protected $attributes;
 
     /**
      * @var boolean
@@ -348,26 +348,26 @@ class Menu
     }
 
     /**
-     * Set attribute
+     * Set attributes
      *
-     * @param array $attribute
+     * @param array $attributes
      * @return Menu
      */
-    public function setAttribute($attribute)
+    public function setAttributes($attributes)
     {
-        $this->attribute = $attribute;
+        $this->attributes = $attributes;
 
         return $this;
     }
 
     /**
-     * Get attribute
+     * Get attributes
      *
-     * @return array 
+     * @return array
      */
-    public function getAttribute()
+    public function getAttributes()
     {
-        return $this->attribute;
+        return $this->attributes;
     }
 
     /**
@@ -457,4 +457,5 @@ class Menu
     {
         $this->setUpdatedAt( new \DateTime("now") );
     }
+
 }

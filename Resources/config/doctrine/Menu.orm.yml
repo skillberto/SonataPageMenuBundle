@@ -1,7 +1,6 @@
 Skillberto\SonataPageMenuBundle\Entity\Menu:
   type: entity
   table: skillberto_menu
-  #repositoryClass: Gedmo\Tree\Entity\Repository\NestedTreeRepository
   repositoryClass: Skillberto\SonataPageMenuBundle\Entity\Repository\MenuRepository
   gedmo:
     tree:
@@ -17,6 +16,7 @@ Skillberto\SonataPageMenuBundle\Entity\Menu:
       type: string
     clickable:
       type: boolean
+      nullable: true
     lft:
       type: integer
       gedmo:
@@ -34,12 +34,8 @@ Skillberto\SonataPageMenuBundle\Entity\Menu:
       type: integer
       gedmo:
         - treeLevel
-    attribute:
+    attributes:
       type: array
-    #position:
-    #  type: integer
-    #  gedmo:
-    #    - sortablePosition
     active:
       type: boolean
     createdAt:
@@ -53,11 +49,14 @@ Skillberto\SonataPageMenuBundle\Entity\Menu:
       joinColumn:
         name: page_id
         referencedColumnName: id
+      nullable: true
+
     site:
       targetEntity: Application\Sonata\PageBundle\Entity\Site
       joinColumn:
         name: site_id
         referencedColumnName: id
+
     parent:
       targetEntity: Skillberto\SonataPageMenuBundle\Entity\Menu
       inversedBy: children
@@ -71,6 +70,7 @@ Skillberto\SonataPageMenuBundle\Entity\Menu:
 
   oneToMany:
     children:
+      cascade: [persist]
       targetEntity: Skillberto\SonataPageMenuBundle\Entity\Menu
       mappedBy: parent
       orderBy:

@@ -46,6 +46,18 @@
                 <source>label_menu</source>
                 <target>Menü</target>
             </trans-unit>
+            <trans-unit id="12">
+                <source>form_menu.group_main_label</source>
+                <target>Főmenü</target>
+            </trans-unit>
+            <trans-unit id="13">
+                <source>form_menu.group_attribute_label</source>
+                <target>Attribútumok</target>
+            </trans-unit>
+            <trans-unit id="14">
+                <source>attributes</source>
+                <target>Attribútumok</target>
+            </trans-unit>
         </body>
     </file>
 </xliff>

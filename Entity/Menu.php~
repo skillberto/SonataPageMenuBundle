@@ -70,11 +70,6 @@ class Menu
     protected $attribute;
 
     /**
-     * @var integer
-     */
-    protected $position;
-
-    /**
      * @var boolean
      */
     protected $active;
@@ -375,30 +370,6 @@ class Menu
         return $this->attribute;
     }
 
-
-    /**
-     * Set position
-     *
-     * @param integer $position
-     * @return Menu
-     */
-    public function setPosition($position)
-    {
-        $this->position = $position;
-
-        return $this;
-    }
-
-    /**
-     * Get position
-     *
-     * @return integer 
-     */
-    public function getPosition()
-    {
-        return $this->position;
-    }
-
     /**
      * Set active
      *
@@ -468,6 +439,8 @@ class Menu
     {
         return $this->updatedAt;
     }
+
+
     /**
      * @ORM\PrePersist
      */

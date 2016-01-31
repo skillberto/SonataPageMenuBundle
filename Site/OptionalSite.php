@@ -24,7 +24,7 @@ class OptionalSite implements OptionalSiteInterface
     {
         $currentRequest = $this->requestStack->getCurrentRequest();
 
-        if ($siteId = $currentRequest->get('site')) {
+        if ($currentRequest && $siteId = $currentRequest->get('site')) {
             return $this->siteManagerInterface->find($siteId);
         }
 

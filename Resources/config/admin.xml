@@ -1,0 +1,52 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="skillberto.sonata_page_menu.admin.util" class="Skillberto\SonataPageMenuBundle\Util\PositionHandler" />
+
+        <service id="skillberto.sonata_page_menu.admin.category" class="Skillberto\SonataPageMenuBundle\Admin\MenuAdmin" >
+            <tag name="sonata.admin" manager_type="orm" show_in_dashboard="true" group="System" label="label_menu" />
+
+            <argument />
+            <argument>Skillberto\SonataPageMenuBundle\Entity\Menu</argument>
+            <argument>SkillbertoSonataPageMenuBundle:MenuAdmin</argument>
+
+            <call method="setPageManager">
+                <argument type="service" id="sonata.page.manager.page" />
+            </call>
+
+            <call method="setOptionalSite">
+                <argument type="service" id="skillberto.sonata_page_menu.site.optional" />
+            </call>
+
+            <call method="addChild">
+                <argument type="service" id="skillberto.sonata_page_menu.admin.child" />
+            </call>
+
+        </service>
+
+        <service id="skillberto.sonata_page_menu.admin.child" class="Skillberto\SonataPageMenuBundle\Admin\ChildMenuAdmin" >
+            <tag name="sonata.admin" manager_type="orm" show_in_dashboard="false" group="System" label="label_menu" />
+
+            <argument/>
+            <argument>Skillberto\SonataPageMenuBundle\Entity\Menu</argument>
+            <argument>SkillbertoSonataPageMenuBundle:ChildMenuAdmin</argument>
+
+            <call method="setPageManager">
+                <argument type="service" id="sonata.page.manager.page" />
+            </call>
+
+            <call method="setOptionalSite">
+                <argument type="service" id="skillberto.sonata_page_menu.site.optional" />
+            </call>
+
+            <call method="setPositionHandler">
+                <argument type="service" id="skillberto.sonata_page_menu.admin.util" />
+            </call>
+        </service>
+
+    </services>
+</container>

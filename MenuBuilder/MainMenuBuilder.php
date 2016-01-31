@@ -98,7 +98,7 @@ class MainMenuBuilder implements MenuBuilderInterface
             $this->createLink($current, $menu);
         }
 
-        if ($this->request->get('page') && $menu->getPage() && $menu->getPage()->getId() == $this->request->get('page')->getId()) {
+        if ($this->request->get('page') && $menu->getPage()->getId() == $this->request->get('page')->getId()) {
             $current->setCurrent(true);
             $this->currentMenuName = $menu->getName();
         }

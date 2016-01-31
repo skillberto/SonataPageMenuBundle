@@ -4,7 +4,7 @@
 namespace Skillberto\SonataPageMenuBundle\Util;
 
 
-class PositionHandler
+class PositionHandler implements PositionHandlerInterface
 {
     protected
         $positions = array(),
@@ -12,9 +12,7 @@ class PositionHandler
     ;
 
     /**
-     * @param  array $positions
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function setPositions(array $positions)
     {
@@ -24,10 +22,7 @@ class PositionHandler
     }
 
     /**
-     * @param int $id
-     * @param $value
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function setPosition($id, $value)
     {
@@ -37,9 +32,7 @@ class PositionHandler
     }
 
     /**
-     * @param  array $lastPositions
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function setLastPositions(array $lastPositions)
     {
@@ -49,7 +42,7 @@ class PositionHandler
     }
 
     /**
-     * @return int
+     * {@inheritdoc}
      */
     public function getPositions()
     {
@@ -57,9 +50,7 @@ class PositionHandler
     }
 
     /**
-     * @param  int $id
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function getPosition($id)
     {
@@ -67,7 +58,7 @@ class PositionHandler
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getLastPositions()
     {
@@ -75,20 +66,15 @@ class PositionHandler
     }
 
     /**
-     * @param  int $id
-     *
-     * @return int
+     * {@inheritdoc}
      */
     public function getLastPosition($id)
     {
         return isset($this->lastPositions[$id]) ? $this->lastPositions[$id] : 0;
     }
 
-
     /**
-     * @param  int $id
-     *
-     * @return $this
+     * {@inheritdoc}
      */
     public function incrementPosition($id)
     {
