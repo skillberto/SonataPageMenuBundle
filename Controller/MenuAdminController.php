@@ -2,7 +2,7 @@
 
 namespace Skillberto\SonataPageMenuBundle\Controller;
 
-use Skillberto\AdminBundle\Controller\CRUDController as Controller;
+use Skillberto\SonataExtendedAdminBundle\Controller\CRUDController as Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;

@@ -5,7 +5,7 @@ namespace Skillberto\SonataPageMenuBundle\Admin;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Util\ClassUtils;
 use Skillberto\SonataPageMenuBundle\Util\PositionHandler;
-use Sonata\AdminBundle\Admin\Admin;
+use Sonata\SonataExtendedAdminBundle\Admin\Admin;
 use Skillberto\SonataPageMenuBundle\Entity\Menu;
 use Skillberto\SonataPageMenuBundle\Site\OptionalSiteInterface;
 use Sonata\AdminBundle\Form\FormMapper;
