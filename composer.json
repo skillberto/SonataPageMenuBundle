@@ -1,5 +1,5 @@
 {
-  "name": "skillberto/sonatapagemenu-bundle",
+  "name": "skillberto/sonata-page-menu-bundle",
   "type": "symfony-bundle",
   "description": "Menu handling with SonataPageBundle for the Symfony Framework",
   "keywords": [],
