@@ -57,6 +57,12 @@ class MainMenuBuilder implements MenuBuilderInterface
 
         $menus   = $this->managerRegistry->getRepository($this->menuEntity)->findBy(array("site" => $site->getId(), "parent" => null), array("root" => "ASC", "lft" => "ASC"));
 
+        if (count($menus) == 0) {
+            $this->mainMenu = $this->factoryInterface->createItem('root');
+
+            return;
+        }
+
         $this->createMenuStructure($menus);
     }
 
