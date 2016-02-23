@@ -6,7 +6,6 @@ use Skillberto\SonataPageMenuBundle\Exception\SiteNotFoundException;
 use Sonata\PageBundle\Model\SiteInterface;
 use Sonata\PageBundle\Model\SiteManagerInterface;
 use Sonata\PageBundle\Site\SiteSelectorInterface;
-use Sonata\PageBundle\Tests\Site\Site;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class OptionalSite implements OptionalSiteInterface
