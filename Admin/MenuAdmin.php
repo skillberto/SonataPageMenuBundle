@@ -5,15 +5,15 @@ namespace Skillberto\SonataPageMenuBundle\Admin;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Util\ClassUtils;
 use Skillberto\SonataPageMenuBundle\Util\PositionHandler;
-use Sonata\AdminBundle\Admin\Admin;
 use Skillberto\SonataPageMenuBundle\Entity\Menu;
 use Skillberto\SonataPageMenuBundle\Site\OptionalSiteInterface;
+use Sonata\CoreBundle\Validator\ErrorElement;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
-use Sonata\AdminBundle\Validator\ErrorElement;
 use Sonata\PageBundle\Model\PageManagerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
