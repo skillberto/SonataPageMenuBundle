@@ -1,6 +1,6 @@
 Skillberto\SonataPageMenuBundle\Entity\Menu:
   type: entity
-  table: skillberto_menu
+  table: skillberto__menu
   #repositoryClass: Gedmo\Tree\Entity\Repository\NestedTreeRepository
   repositoryClass: Skillberto\SonataPageMenuBundle\Entity\Repository\MenuRepository
   gedmo:
