@@ -170,6 +170,8 @@ class MenuAdmin extends Admin
         $formMapper
              ->add('name', 'text')
              ->add('page', 'sonata_page_selector', array(
+             ->add('icon', 'text', array('required' => false))
+             ->add('page', PageSelectorType::class, array(
                         'site'          => $this->siteInstance,
                         'model_manager' => $this->getModelManager(),
                         'class'         => 'Application\Sonata\PageBundle\Entity\Page',
@@ -181,6 +183,8 @@ class MenuAdmin extends Admin
                         )
                     ))
              ->add('parent','sonata_type_model', array('required' => false))
+             ->add('parent', 'sonata_type_model', array('required' => false))
+             ->add('userRestricted', 'checkbox', array('required' => false, 'attr' => $this->formAttribute))
              ->add('active', 'checkbox', array('required' => false, 'attr' => $this->formAttribute))
              ->add('clickable', 'checkbox', array('required' => false, 'attr' => $this->formAttribute))
             ;
@@ -198,8 +202,10 @@ class MenuAdmin extends Admin
         $listMapper
             ->addIdentifier('id')
             ->add('name', 'string', array('template' => 'SkillbertoSonataPageMenuBundle:Admin:base_list_field.html.twig'))
+            ->add('icon', 'string', array('template' => 'SkillbertoSonataPageMenuBundle:Admin:base_list_field.html.twig'))
             ->add('page')
             ->add('parent')
+            ->add('userRestricted')
             ->add('active')
             ->add('clickable')
             ->add('_action', 'actions', array(

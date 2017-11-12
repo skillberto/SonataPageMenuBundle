@@ -11,28 +11,30 @@ use Sonata\PageBundle\Site\SiteSelectorInterface;
 use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class MainMenuBuilder implements MenuBuilderInterface
 {
-    protected
-        $menuEntity,
-        $factoryInterface,
-        $managerRegistry,
-        $routerInterface,
-        $siteSelectorInterface,
-        $currentMenuName = null,
-        $rendered = false,
-        $mainMenu,
-        $request;
+    protected $menuEntity;
+    protected $factoryInterface;
+    protected $managerRegistry;
+    protected $routerInterface;
+    protected $siteSelectorInterface;
+    protected $currentMenuName = null;
+    protected $rendered = false;
+    protected $mainMenu;
+    protected $request;
+    protected $authorizationChecker;
 
-    public function __construct($menuEntity, FactoryInterface $factoryInterface, ManagerRegistry $managerRegistry, RequestStack $requestStack, ChainedRouterInterface $routerInterface, SiteSelectorInterface $siteSelectorInterface)
+    public function __construct($menuEntity, FactoryInterface $factoryInterface, ManagerRegistry $managerRegistry, RequestStack $requestStack, ChainedRouterInterface $routerInterface, SiteSelectorInterface $siteSelectorInterface, AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->menuEntity               = $menuEntity;
         $this->factoryInterface         = $factoryInterface;
         $this->managerRegistry          = $managerRegistry;
-        $this->request                  = $requestStack->getCurrentRequest();;
+        $this->request                  = $requestStack->getCurrentRequest();
         $this->routerInterface          = $routerInterface;
         $this->siteSelectorInterface    = $siteSelectorInterface;
+        $this->authorizationChecker     = $authorizationChecker;
     }
     
     public function getMenu()
@@ -75,6 +77,10 @@ class MainMenuBuilder implements MenuBuilderInterface
 
     protected function createMenu(Menu $menu, ItemInterface $root = null)
     {
+        if(null !== $menu->getParent() && $menu->getParent()->getUserRestricted() && !$this->authorizationChecker->isGranted('ROLE_USER')) {
+            return false;
+        }
+        
         $currentItem = $this->createMenuItem($menu);
 
         $level = $menu->getLvl();
@@ -82,7 +88,10 @@ class MainMenuBuilder implements MenuBuilderInterface
         if ($level == 0) {
             $this->mainMenu = $currentItem;
         } else {
-            $root->addChild($currentItem);
+            $currentMenu = $root->addChild($currentItem);
+            if (null !== $menu->getIcon()) {
+                $currentMenu->setExtra('icon', $menu->getIcon());
+            }
         }
 
         if (count($menu->getChildren()) > 0 && ($menu->getActive() or $level == 0)) {

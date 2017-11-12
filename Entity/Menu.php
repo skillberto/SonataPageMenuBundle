@@ -20,6 +20,11 @@ class Menu
     protected $name;
 
     /**
+     * @var string
+     */
+    protected $icon;
+
+    /**
      * @var boolean
      */
     protected $clickable;
@@ -75,6 +80,11 @@ class Menu
     protected $active;
 
     /**
+     * @var boolean
+     */
+    protected $userRestricted;
+    
+    /**
      * @var \DateTime
      */
     protected $createdAt;
@@ -128,6 +138,29 @@ class Menu
     public function getName()
     {
         return $this->name;
+    }
+
+    /**
+     * Set icon
+     *
+     * @param string $icon
+     * @return Menu
+     */
+    public function setIcon($icon)
+    {
+        $this->icon = $icon;
+        
+        return $this;
+    }
+    
+    /**
+     * Get icon
+     *
+     * @return string
+     */
+    public function getIcon()
+    {
+        return $this->icon;
     }
 
     /**
@@ -374,7 +407,7 @@ class Menu
      * Set active
      *
      * @param boolean $active
-     * @return Menu        // Add your code here
+     * @return Menu
 
      */
     public function setActive($active)
@@ -392,6 +425,30 @@ class Menu
     public function getActive()
     {
         return $this->active;
+    }
+
+    /**
+     * Set user restricted
+     *
+     * @param boolean $userRestricted
+     * @return Menu
+     
+     */
+    public function setUserRestricted($userRestricted)
+    {
+        $this->userRestricted = $userRestricted;
+        
+        return $this;
+    }
+    
+    /**
+     * Get user restricted
+     *
+     * @return boolean
+     */
+    public function getUserRestricted()
+    {
+        return $this->userRestricted;
     }
 
     /**
