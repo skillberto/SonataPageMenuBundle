@@ -14,7 +14,7 @@ file that was distributed with this source code.
     {% set action = route == 'show' ? 'VIEW' : route|upper %}
     {% set spaces = "" %}
 
-    {% if object.getLvl() is defined and object.getLvl > 0%}
+    {% if object.getLvl() is defined and object.getLvl > 0 and field_description.name != 'icon' %}
         {% set level = object.getLvl() %}
 
         {% for i in 1..level %}
@@ -77,7 +77,11 @@ file that was distributed with this source code.
                 {{ block('field') }}
             </span>
         {% else %}
-            {{ block('field') }}
+            {% if field_description.name == 'icon' %}
+                <span class="{{ block('field') }}"></span>
+            {% else %}
+                {{ block('field') }}
+            {% endif %}
         {% endif %}
     {% endif %}
 </td>
