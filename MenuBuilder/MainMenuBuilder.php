@@ -26,6 +26,18 @@ class MainMenuBuilder implements MenuBuilderInterface
         $request;
 
     public function __construct($menuEntity, FactoryInterface $factoryInterface, ManagerRegistry $managerRegistry, RequestStack $requestStack, ChainedRouterInterface $routerInterface, SiteSelectorInterface $siteSelectorInterface)
+    protected $menuEntity;
+    protected $factoryInterface;
+    protected $managerRegistry;
+    protected $routerInterface;
+    protected $siteSelectorInterface;
+    protected $currentMenuName = null;
+    protected $rendered = false;
+    protected $mainMenu;
+    protected $request;
+    protected $authorizationChecker;
+    
+    public function __construct($menuEntity, FactoryInterface $factoryInterface, ManagerRegistry $managerRegistry, RequestStack $requestStack, ChainedRouterInterface $routerInterface, SiteSelectorInterface $siteSelectorInterface, AuthorizationCheckerInterface $authorizationChecker)
     {
         $this->menuEntity               = $menuEntity;
         $this->factoryInterface         = $factoryInterface;
@@ -87,7 +99,7 @@ class MainMenuBuilder implements MenuBuilderInterface
             if (null !== $menu->getIcon()) {
                 $currentMenu->setExtra('icon', $menu->getIcon());
             }
-            if ($level == 1) {
+            if ($level == 1 && $menu->getChildren()->count() > 0) {
                 $currentMenu->setExtra('dropdown', true);
             }
         }
