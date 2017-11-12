@@ -16,6 +16,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\PageBundle\Model\PageManagerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
+use Sonata\PageBundle\Form\Type\PageSelectorType;
 
 class MenuAdmin extends Admin
 {
@@ -169,7 +170,7 @@ class MenuAdmin extends Admin
 
         $formMapper
              ->add('name', 'text')
-             ->add('page', 'sonata_page_selector', array(
+             ->add('page', PageSelectorType::class, array(
                         'site'          => $this->siteInstance,
                         'model_manager' => $this->getModelManager(),
                         'class'         => 'Application\Sonata\PageBundle\Entity\Page',
