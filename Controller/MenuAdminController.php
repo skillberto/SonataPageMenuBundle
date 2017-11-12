@@ -14,12 +14,12 @@ class MenuAdminController extends Controller
     public function moveAction(Request $request)
     {
         if (false === $this->admin->isGranted('LIST')) {
-            throw new AccessDeniedException();
+            throw $this->createAccessDeniedException();
         }
 
         $repo = $this->getDoctrine()->getRepository($this->admin->getClass());
 
-        $menu = $this->getObject();
+        $menu = $this->getObject($request);
 
         switch ($request->get('position')) {
             case 'down':
@@ -51,9 +51,9 @@ class MenuAdminController extends Controller
      * @throws Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
      * @return Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function activateAction()
+    public function activateAction(Request $request)
     {
-        $object = $this->getObject();
+        $object = $this->getObject($request);
         
         if (method_exists($object, 'setActive') && method_exists($object, 'getActive')) {
             $object->setActive(($object->getActive()==1) ? 0 : 1);
@@ -64,14 +64,13 @@ class MenuAdminController extends Controller
         return new RedirectResponse($this->admin->generateUrl('list'));
     }
     
-    protected function getObject($objectId = NULL)
+    protected function getObject(Request $request, $objectId = null)
     {
-        $id = $this->get('request')->get($this->admin->getIdParameter());
-        
+        $id = $request->get($this->admin->getIdParameter());
         $object = $this->admin->getObject(empty($objectId) ? $id : $objectId);
         
         if (!$object) {
-            throw new NotFoundHttpException(sprintf('unable to find the object with id : %s', $id));
+            throw $this->createNotFoundException(sprintf('unable to find the object with id: %s', $id));
         }
         
         return $object;
