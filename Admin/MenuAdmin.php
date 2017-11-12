@@ -2,14 +2,12 @@
 
 namespace Skillberto\SonataPageMenuBundle\Admin;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\Common\Util\ClassUtils;
 use Skillberto\SonataPageMenuBundle\Util\PositionHandler;
 use Skillberto\SonataPageMenuBundle\Entity\Menu;
 use Skillberto\SonataPageMenuBundle\Site\OptionalSiteInterface;
 use Sonata\CoreBundle\Validator\ErrorElement;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
@@ -18,16 +16,15 @@ use Sonata\PageBundle\Model\PageManagerInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Sonata\PageBundle\Form\Type\PageSelectorType;
 
-class MenuAdmin extends Admin
+class MenuAdmin extends AbstractAdmin
 {
-    protected
-        $managerRegistry,
-        $pageManagerInterface,
-        $optionalSiteInterface,
-        $formAttribute = array(),
-        $pageInstance,
-        $siteInstance,
-        $positionHandler
+    protected $managerRegistry;
+    protected $pageManagerInterface;
+    protected $optionalSiteInterface;
+    protected $formAttribute = array();
+    protected $pageInstance;
+    protected $siteInstance;
+    protected $positionHandler
     ;
 
     public function __construct($code, $class, $baseControllerName, PageManagerInterface $pageManagerInterface, OptionalSiteInterface $optionalSiteInterface)
@@ -181,7 +178,7 @@ class MenuAdmin extends Admin
                             'siteId' => $this->getSubject() ? $this->getSubject()->getSite()->getId() : null
                         )
                     ))
-             ->add('parent','sonata_type_model', array('required' => false))
+             ->add('parent', 'sonata_type_model', array('required' => false))
              ->add('active', 'checkbox', array('required' => false, 'attr' => $this->formAttribute))
              ->add('clickable', 'checkbox', array('required' => false, 'attr' => $this->formAttribute))
             ;
@@ -203,7 +200,10 @@ class MenuAdmin extends Admin
             ->add('parent')
             ->add('active')
             ->add('clickable')
-            ->add('_action', 'actions', array(
+            ->add(
+                '_action',
+                'actions',
+                array(
                 'actions' => array(
                     'edit'      => array(),
                     'delete'    => array(),
@@ -272,8 +272,7 @@ class MenuAdmin extends Admin
         $count = array();
 
         foreach ($repo->getParentChildNumber() as $data) {
-
-            if ($data['parent'] == null ) {
+            if ($data['parent'] == null) {
                 $data['parent'] = 0;
             }
 
