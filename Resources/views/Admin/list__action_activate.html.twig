@@ -1,0 +1,11 @@
+{% if admin.isGranted('EDIT', object) and admin.hasRoute('activate') %}
+    {% if object.active %}
+        {% set action = 'action_inactivate' %}
+    {% else %}
+        {% set action = 'action_activate' %}
+    {% endif %}
+    <a href="{{ admin.generateObjectUrl('activate', object) }}" class="btn edit_link btn-sm btn-default" title="{{ action|trans }}">
+        <i class="icon-edit"></i>
+        {{ action|trans }}
+    </a>
+{% endif %}

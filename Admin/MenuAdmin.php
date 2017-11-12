@@ -207,7 +207,7 @@ class MenuAdmin extends Admin
                 'actions' => array(
                     'edit'      => array(),
                     'delete'    => array(),
-                    'activate'  => array('template' => 'SkillbertoSonataExtendedAdminBundle:Admin:list__action_activate.html.twig'),
+                    'activate'  => array('template' => 'SkillbertoSonataPageMenuBundle:Admin:list__action_activate.html.twig'),
                     'move'      => array('template' => 'SkillbertoSonataPageMenuBundle:Admin:list__action_sort.html.twig')
                     )
                 )
