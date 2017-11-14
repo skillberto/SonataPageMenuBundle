@@ -183,10 +183,11 @@ class MenuAdmin extends Admin
                         )
                     ))
              ->add('parent', 'sonata_type_model', array('required' => false))
-             ->add('userRestricted', 'checkbox', array('required' => false, 'attr' => $this->formAttribute))
              ->add('active', 'checkbox', array('required' => false, 'attr' => $this->formAttribute))
              ->add('clickable', 'checkbox', array('required' => false, 'attr' => $this->formAttribute))
-            ;
+             ->add('userRestricted', 'checkbox', array('required' => false))
+             ->add('hideWhenUserConnected', 'checkbox', array('required' => false))
+             ;
     }
 
     /**
@@ -204,9 +205,10 @@ class MenuAdmin extends Admin
             ->add('icon', 'string', array('template' => 'SkillbertoSonataPageMenuBundle:Admin:base_list_field.html.twig'))
             ->add('page')
             ->add('parent')
-            ->add('userRestricted')
             ->add('active')
             ->add('clickable')
+            ->add('userRestricted')
+            ->add('hideWhenUserConnected')
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit'      => array(),

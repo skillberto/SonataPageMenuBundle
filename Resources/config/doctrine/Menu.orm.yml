@@ -47,6 +47,8 @@ Skillberto\SonataPageMenuBundle\Entity\Menu:
       type: boolean
     userRestricted:
       type: boolean
+    hideWhenUserConnected:
+      type: boolean
     createdAt:
       type: datetime
     updatedAt:

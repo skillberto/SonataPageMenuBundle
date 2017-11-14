@@ -77,7 +77,12 @@ class MainMenuBuilder implements MenuBuilderInterface
 
     protected function createMenu(Menu $menu, ItemInterface $root = null)
     {
-        if(null !== $menu->getParent() && $menu->getParent()->getUserRestricted() && !$this->authorizationChecker->isGranted('ROLE_USER')) {
+        if((null !== $menu->getParent() && $menu->getParent()->getUserRestricted() || $menu->getUserRestricted()) && 
+            !$this->authorizationChecker->isGranted('ROLE_USER')) {
+            return false;
+        }
+
+        if($menu->getHideWhenUserConnected() && $this->authorizationChecker->isGranted('ROLE_USER')) {
             return false;
         }
         

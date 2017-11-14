@@ -13,87 +13,92 @@ class Menu
      * @var integer
      */
     protected $id;
-
+    
     /**
      * @var string
      */
     protected $name;
-
+    
     /**
      * @var string
      */
     protected $icon;
-
+    
     /**
      * @var boolean
      */
     protected $clickable;
-
+    
     /**
      * @var integer
      */
     protected $lft;
-
+    
     /**
      * @var integer
      */
     protected $rgt;
-
+    
     /**
      * @var integer
      */
     protected $root;
-
+    
     /**
      * @var integer
      */
     protected $lvl;
-
+    
     /**
      * @var \Doctrine\Common\Collections\Collection
      */
     protected $children;
-
+    
     /**
      * @var \Application\Sonata\PageBundle\Entity\Page
      */
     protected $page;
-
+    
     /**
      * @var \Application\Sonata\PageBundle\Entity\Site
      */
     protected $site;
-
+    
     /**
      * @var \Skillberto\SonataPageMenuBundle\Entity\Menu
      */
     protected $parent;
-
+    
     /**
      * @var array
      */
     protected $attribute;
-
+    
     /**
      * @var boolean
      */
     protected $active;
-
+    
     /**
      * @var boolean
      */
     protected $userRestricted;
     
     /**
+     * @var boolean
+     */
+    protected $hideWhenUserConnected;
+    
+    /**
      * @var \DateTime
      */
     protected $createdAt;
-
+    
     /**
      * @var \DateTime
      */
     protected $updatedAt;
-
+    
     /**
      * Constructor
      */
@@ -101,22 +106,22 @@ class Menu
     {
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
     }
-
+    
     public function __toString()
     {
-        return $this->getName();
+        return (string) $this->getName();
     }
-
+    
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
     }
-
+    
     /**
      * Set name
      *
@@ -126,20 +131,20 @@ class Menu
     public function setName($name)
     {
         $this->name = $name;
-
+        
         return $this;
     }
-
+    
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
         return $this->name;
     }
-
+    
     /**
      * Set icon
      *
@@ -162,7 +167,7 @@ class Menu
     {
         return $this->icon;
     }
-
+    
     /**
      * Set clickable
      *
@@ -172,20 +177,20 @@ class Menu
     public function setClickable($clickable)
     {
         $this->clickable = $clickable;
-
+        
         return $this;
     }
-
+    
     /**
      * Get clickable
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getClickable()
     {
         return $this->clickable;
     }
-
+    
     /**
      * Set lft
      *
@@ -195,20 +200,20 @@ class Menu
     public function setLft($lft)
     {
         $this->lft = $lft;
-
+        
         return $this;
     }
-
+    
     /**
      * Get lft
      *
-     * @return integer 
+     * @return integer
      */
     public function getLft()
     {
         return $this->lft;
     }
-
+    
     /**
      * Set rgt
      *
@@ -218,20 +223,20 @@ class Menu
     public function setRgt($rgt)
     {
         $this->rgt = $rgt;
-
+        
         return $this;
     }
-
+    
     /**
      * Get rgt
      *
-     * @return integer 
+     * @return integer
      */
     public function getRgt()
     {
         return $this->rgt;
     }
-
+    
     /**
      * Set root
      *
@@ -241,20 +246,20 @@ class Menu
     public function setRoot($root)
     {
         $this->root = $root;
-
+        
         return $this;
     }
-
+    
     /**
      * Get root
      *
-     * @return integer 
+     * @return integer
      */
     public function getRoot()
     {
         return $this->root;
     }
-
+    
     /**
      * Set lvl
      *
@@ -264,20 +269,20 @@ class Menu
     public function setLvl($lvl)
     {
         $this->lvl = $lvl;
-
+        
         return $this;
     }
-
+    
     /**
      * Get lvl
      *
-     * @return integer 
+     * @return integer
      */
     public function getLvl()
     {
         return $this->lvl;
     }
-
+    
     /**
      * Add children
      *
@@ -287,10 +292,10 @@ class Menu
     public function addChild(\Skillberto\SonataPageMenuBundle\Entity\Menu $children)
     {
         $this->children[] = $children;
-
+        
         return $this;
     }
-
+    
     /**
      * Remove children
      *
@@ -300,17 +305,17 @@ class Menu
     {
         $this->children->removeElement($children);
     }
-
+    
     /**
      * Get children
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getChildren()
     {
         return $this->children;
     }
-
+    
     /**
      * Set page
      *
@@ -320,20 +325,20 @@ class Menu
     public function setPage(\Application\Sonata\PageBundle\Entity\Page $page = null)
     {
         $this->page = $page;
-
+        
         return $this;
     }
-
+    
     /**
      * Get page
      *
-     * @return \Application\Sonata\PageBundle\Entity\Page 
+     * @return \Application\Sonata\PageBundle\Entity\Page
      */
     public function getPage()
     {
         return $this->page;
     }
-
+    
     /**
      * Set site
      *
@@ -343,20 +348,20 @@ class Menu
     public function setSite(\Application\Sonata\PageBundle\Entity\Site $site = null)
     {
         $this->site = $site;
-
+        
         return $this;
     }
-
+    
     /**
      * Get site
      *
-     * @return \Application\Sonata\PageBundle\Entity\Site 
+     * @return \Application\Sonata\PageBundle\Entity\Site
      */
     public function getSite()
     {
         return $this->site;
     }
-
+    
     /**
      * Set parent
      *
@@ -366,20 +371,20 @@ class Menu
     public function setParent(\Skillberto\SonataPageMenuBundle\Entity\Menu $parent = null)
     {
         $this->parent = $parent;
-
+        
         return $this;
     }
-
+    
     /**
      * Get parent
      *
-     * @return \Skillberto\SonataPageMenuBundle\Entity\Menu 
+     * @return \Skillberto\SonataPageMenuBundle\Entity\Menu
      */
     public function getParent()
     {
         return $this->parent;
     }
-
+    
     /**
      * Set attribute
      *
@@ -389,44 +394,44 @@ class Menu
     public function setAttribute($attribute)
     {
         $this->attribute = $attribute;
-
+        
         return $this;
     }
-
+    
     /**
      * Get attribute
      *
-     * @return array 
+     * @return array
      */
     public function getAttribute()
     {
         return $this->attribute;
     }
-
+    
     /**
      * Set active
      *
      * @param boolean $active
      * @return Menu
-
+     
      */
     public function setActive($active)
     {
         $this->active = $active;
-
+        
         return $this;
     }
-
+    
     /**
      * Get active
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getActive()
     {
         return $this->active;
     }
-
+    
     /**
      * Set user restricted
      *
@@ -450,7 +455,31 @@ class Menu
     {
         return $this->userRestricted;
     }
-
+    
+    /**
+     * Set hide when user connected
+     *
+     * @param boolean $hideWhenUserConnected
+     * @return Menu
+     
+     */
+    public function setHideWhenUserConnected($hideWhenUserConnected)
+    {
+        $this->hideWhenUserConnected = $hideWhenUserConnected;
+        
+        return $this;
+    }
+    
+    /**
+     * Get hide when user connected
+     *
+     * @return boolean
+     */
+    public function getHideWhenUserConnected()
+    {
+        return $this->hideWhenUserConnected;
+    }
+    
     /**
      * Set createdAt
      *
@@ -460,20 +489,20 @@ class Menu
     public function setCreatedAt($createdAt)
     {
         $this->createdAt = $createdAt;
-
+        
         return $this;
     }
-
+    
     /**
      * Get createdAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreatedAt()
     {
         return $this->createdAt;
     }
-
+    
     /**
      * Set updatedAt
      *
@@ -483,21 +512,21 @@ class Menu
     public function setUpdatedAt($updatedAt)
     {
         $this->updatedAt = $updatedAt;
-
+        
         return $this;
     }
-
+    
     /**
      * Get updatedAt
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getUpdatedAt()
     {
         return $this->updatedAt;
     }
-
-
+    
+    
     /**
      * @ORM\PrePersist
      */
@@ -506,7 +535,7 @@ class Menu
         $this->setCreatedAt( new \DateTime("now") );
         $this->setUpdatedAt( new \DateTime("now") );
     }
-
+    
     /**
      * @ORM\PostPersist
      */
