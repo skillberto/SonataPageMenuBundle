@@ -1,14 +1,19 @@
+{% set navbar_brand = sonata_page_menu.bootstrap_options.navbar_brand %}
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-menu-collapse" aria-expanded="false">
-                <span class="sr-only">{{ 'Naviguer'|trans }}</span>
+                <span class="sr-only">{{ navbar_brand.mobile_text|trans }}</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{{ path('home') }}">{{ 'Pygmabook'|trans }}</a>
+            {% if navbar_brand.displayed %}
+                <a class="navbar-brand" href="{% if navbar_brand.link_path != '#' %}{{ path(navbar_brand.link_path) }}{% else %}#{% endif %}">
+                    {{ navbar_brand.title|raw }}
+                </a>
+            {% endif %}
         </div>
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="main-menu-collapse">
