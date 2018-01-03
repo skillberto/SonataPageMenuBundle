@@ -83,6 +83,13 @@ class MainMenuBuilder implements MenuBuilderInterface
             $this->mainMenu = $currentItem;
         } else {
             $root->addChild($currentItem);
+            $currentMenu = $root->addChild($currentItem);
+            if (null !== $menu->getIcon()) {
+                $currentMenu->setExtra('icon', $menu->getIcon());
+            }
+            if ($level == 1 && $menu->getChildren()->count() > 0) {
+                $currentMenu->setExtra('dropdown', true);
+            }
         }
 
         if (count($menu->getChildren()) > 0 && ($menu->getActive() or $level == 0)) {
@@ -121,11 +128,11 @@ class MainMenuBuilder implements MenuBuilderInterface
 
     protected function putRootAttributes(ItemInterface $itemInterface)
     {
-        $itemInterface->setChildrenAttribute("class", "nav sf-menu clearfix sf-js-enabled");
+        $itemInterface->setChildrenAttribute("class", "nav navbar-nav");
     }
 
     protected function putChildAttributes(ItemInterface $itemInterface)
     {
-        $itemInterface->setAttribute("class", "sub-menu");
+        $itemInterface->setAttribute("class", "");
     }
 }
