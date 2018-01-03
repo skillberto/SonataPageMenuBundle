@@ -135,11 +135,11 @@ class MainMenuBuilder implements MenuBuilderInterface
 
     protected function putRootAttributes(ItemInterface $itemInterface)
     {
-        $itemInterface->setChildrenAttribute("class", "nav sf-menu clearfix sf-js-enabled");
+        $itemInterface->setChildrenAttribute("class", "nav navbar-nav");
     }
 
     protected function putChildAttributes(ItemInterface $itemInterface)
     {
-        $itemInterface->setAttribute("class", "sub-menu");
+        $itemInterface->setAttribute("class", "");
     }
 }

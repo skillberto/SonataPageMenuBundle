@@ -8,23 +8,23 @@
             </trans-unit>
             <trans-unit id="2">
                 <source>flash_error_no_rights_update_position</source>
-                <target>flash_error_no_rights_update_position</target>
+                <target>Vous n'avez pas les droits pour mettre à jour la position !</target>
             </trans-unit>
             <trans-unit id="3">
                 <source>move_to_bottom</source>
-                <target>move_to_bottom</target>
+                <target>Déplacer en dernier</target>
             </trans-unit>
             <trans-unit id="4">
                 <source>move_down</source>
-                <target>move_down</target>
+                <target>Déplacer vers le bas</target>
             </trans-unit>
             <trans-unit id="5">
                 <source>move_up</source>
-                <target>move_up</target>
+                <target>Déplacer vers le haut</target>
             </trans-unit>
             <trans-unit id="6">
                 <source>move_to_top</source>
-                <target>move_to_top</target>
+                <target>Déplacer en premier</target>
             </trans-unit>
             <trans-unit id="7">
                 <source>icon_move_to_bottom</source>
@@ -45,6 +45,14 @@
             <trans-unit id="11">
                 <source>label_menu</source>
                 <target>Menu</target>
+            </trans-unit>
+            <trans-unit id="action_activate">
+                <source>action_activate</source>
+                <target>Activer</target>
+            </trans-unit>
+            <trans-unit id="action_inactivate">
+                <source>action_inactivate</source>
+                <target>Désactiver</target>
             </trans-unit>
         </body>
     </file>
