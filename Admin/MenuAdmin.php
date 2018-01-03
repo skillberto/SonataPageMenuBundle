@@ -167,6 +167,7 @@ class MenuAdmin extends AbstractAdmin
 
         $formMapper
              ->add('name', 'text')
+             ->add('icon', 'text', array('required' => false))
              ->add('page', PageSelectorType::class, array(
                         'site'          => $this->siteInstance,
                         'model_manager' => $this->getModelManager(),
@@ -181,7 +182,9 @@ class MenuAdmin extends AbstractAdmin
              ->add('parent', 'sonata_type_model', array('required' => false))
              ->add('active', 'checkbox', array('required' => false, 'attr' => $this->formAttribute))
              ->add('clickable', 'checkbox', array('required' => false, 'attr' => $this->formAttribute))
-            ;
+             ->add('userRestricted', 'checkbox', array('required' => false))
+             ->add('hideWhenUserConnected', 'checkbox', array('required' => false))
+             ;
     }
 
     /**
@@ -196,14 +199,14 @@ class MenuAdmin extends AbstractAdmin
         $listMapper
             ->addIdentifier('id')
             ->add('name', 'string', array('template' => 'SkillbertoSonataPageMenuBundle:Admin:base_list_field.html.twig'))
+            ->add('icon', 'string', array('template' => 'SkillbertoSonataPageMenuBundle:Admin:base_list_field.html.twig'))
             ->add('page')
             ->add('parent')
             ->add('active')
             ->add('clickable')
-            ->add(
-                '_action',
-                'actions',
-                array(
+            ->add('userRestricted')
+            ->add('hideWhenUserConnected')
+            ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit'      => array(),
                     'delete'    => array(),

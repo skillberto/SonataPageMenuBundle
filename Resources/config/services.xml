@@ -18,6 +18,7 @@
             <argument type="service" id="request_stack" />
             <argument type="service" id="sonata.page.router" />
             <argument type="service" id="sonata.page.site.selector" />
+            <argument type="service" id="security.authorization_checker" />
         </service>
 
         <service id="skillberto.sonatamenu.main" class="Knp\Menu\MenuItem" >

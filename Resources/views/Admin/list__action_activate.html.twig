@@ -1,4 +1,4 @@
-{% if admin.isGranted('EDIT', object) and admin.hasRoute('activate') %}
+{% if admin.hasAccess('edit', object) and admin.hasRoute('activate') %}
     {% if object.active %}
         {% set action = 'action_inactivate' %}
         {% set icon = 'fa-circle-o' %}
